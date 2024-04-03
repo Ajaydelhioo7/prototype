@@ -1,25 +1,54 @@
-import React from "react";
+import React, { useState } from "react";
 
-const Dropdown = () => {
+function Dropdown() {
+  const [isOpen, setisOpen] = useState(false);
+  const [drop, setDrop] = useState("Dropdown Button");
+  const [inputValue, setInputValue] = useState("");
+
+  const handleClick = () => {
+    setisOpen(!isOpen);
+  };
+  const handleDrop = (item) => {
+    setDrop(item.title);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    localStorage.setItem("Tags", inputValue);
+    // You can do something with the inputValue here, like sending it to an API or updating another state
+  };
+  const handleChange = (e) => {
+    e.preventDefault();
+    setInputValue(e.target.value); // update the input value
+  };
+  const list = [
+    {
+      id: "1",
+      title: "History",
+    },
+    {
+      id: "2",
+      title: "Society",
+    },
+    {
+      id: "3",
+      title: "Math",
+    },
+  ];
   return (
-    <div>
-      <form>
-        <div className="flex">
-          <label
-            for="search-dropdown"
-            className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-          >
-            Your Email
-          </label>
+    <>
+      <div className="flex w-full justify-between px-4 gap-4">
+        {/* button starts here */}
+        <div className="flex flex-col">
           <button
-            id="dropdown-button"
+            id="dropdownDefaultButton"
+            onClick={handleClick}
             data-dropdown-toggle="dropdown"
-            className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-e-0 border-gray-300 dark:border-gray-700 dark:text-white rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             type="button"
           >
-            Master Tags{" "}
+            {drop}
             <svg
-              className="w-2.5 h-2.5 ms-2.5"
+              className="w-2.5 h-2.5 ms-3"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -27,90 +56,57 @@ const Dropdown = () => {
             >
               <path
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
                 d="m1 1 4 4 4-4"
               />
             </svg>
           </button>
-          <div
-            id="dropdown"
-            className="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
-          >
-            <ul
-              className="py-2 text-sm text-gray-700 dark:text-gray-200"
-              aria-labelledby="dropdown-button"
+          {isOpen && (
+            <div
+              id="dropdown"
+              className="z-10 absolute top-16 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
             >
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  History
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Society
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Geography
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Polity
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  Geography
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                >
-                  IR
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div className="relative w-6/12">
-            <input
-              type="search"
-              id="search-dropdown"
-              className="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg rounded-s-gray-100 rounded-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-              placeholder="Enter Subtag"
-              required
-            />
-            <button
-              type="submit"
-              className="absolute top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 w-3/12"
-            >
-              submit
-            </button>
-          </div>
+              <ul
+                className="py-2 text-sm text-gray-700 dark:text-gray-200"
+                aria-labelledby="dropdownDefaultButton"
+              >
+                {list.map((item) => (
+                  <li key={item.id}>
+                    <a
+                      href="#"
+                      key={item.id}
+                      onClick={() => handleDrop(item)}
+                      onBlur={handleClick}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
-      </form>
-    </div>
+        <div className="flex-1 flex gap-4">
+          <input
+            type="text"
+            onChange={handleChange}
+            placeholder="Enter A Field"
+            value={inputValue}
+            className="border p-2 rounded-md"
+          />
+          <button
+            onClick={handleSubmit}
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+    </>
   );
-};
+}
 
 export default Dropdown;
